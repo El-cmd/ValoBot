@@ -1,114 +1,91 @@
 # ValoBot
 
-Bot Discord minimal base sur `discord.js` v14 et `Node.js 20+`.
+<p align="center">
+  <img src="./assets/valobot-logo.png" alt="ValoBot logo" width="320" />
+</p>
 
-## Fonctionnement
+ValoBot est un projet de bot Discord en developpement autour de VALORANT et de l'API Riot.
 
-Le bot repond dans le meme salon avec `Salut <pseudo> 👋` si :
+## Ce que fait le bot
 
-- le message contient une mention du bot
-- le message contient le mot `salut` (insensible a la casse)
-
-`<pseudo>` correspond au `displayName` Discord de l'auteur (`nickname` du serveur si disponible, sinon `username`).
-
-Le bot peut aussi lister les maps VALORANT avec :
-
-- `@ValoBot maps`
-- `@ValoBot serveur status`
-- `@ValoBot help`
+- `@ValoBot salut` -> repond: `Salut <ton pseudo> 👋`
+- `@ValoBot maps` -> liste les maps VALORANT
+- `@ValoBot serveur status` -> resume l'etat des serveurs VALORANT
+- `@ValoBot help` -> affiche l'aide des commandes
 
 ## Prerequis
 
-- Docker et Docker Compose
-- Un bot Discord avec son token
+- Docker + Docker Compose installes sur le serveur
+- Un bot Discord cree dans le Developer Portal
+- Une cle API Riot (dev ou prod)
 
-## Important: Message Content Intent
+## Important Discord
 
-Il faut activer **MESSAGE CONTENT INTENT** dans le Developer Portal Discord :
+Active **MESSAGE CONTENT INTENT** ici:
 
-`Bot -> Privileged Gateway Intents -> MESSAGE CONTENT INTENT`
+`Discord Developer Portal -> Bot -> Privileged Gateway Intents -> MESSAGE CONTENT INTENT`
 
-Sans cette option, le bot ne verra pas le contenu des messages et ne pourra pas detecter `salut`.
+Sans ca, le bot ne peut pas lire le contenu des messages.
 
-## Configuration
+## Installation rapide
+
+1. Copier le fichier d'environnement:
 
 ```bash
 cp .env.example .env
 ```
 
-Puis editer `.env` et definir :
+2. Remplir `.env`:
 
 ```env
 DISCORD_TOKEN=ton_token_discord
-RIOT_API_KEY=ta_cle_api_riot
+RIOT_API_KEY=ta_cle_riot
 RIOT_API_BASE_URL=https://eu.api.riotgames.com
 RIOT_LOCALE=fr-FR
 ```
 
-Notes Riot :
+3. Lancer le bot:
 
-- `RIOT_API_KEY` est necessaire pour `@ValoBot maps`
-- `RIOT_API_BASE_URL` peut pointer vers une plateforme VALORANT adaptee, par exemple `https://eu.api.riotgames.com` ou `https://na.api.riotgames.com`
-- `RIOT_LOCALE` permet de choisir la langue retournee par Riot
+```bash
+make build
+make up
+make logs
+```
+
+Si tout va bien, tu verras:
+
+```text
+Connecte en tant que VALOBOT#xxxx
+```
 
 ## Commandes Make
 
 ```bash
-make build
-make up
-make down
-make logs
-make restart
+make build    # construit l'image
+make up       # demarre le conteneur
+make down     # arrete le conteneur
+make logs     # suit les logs en direct
+make restart  # redemarre le bot
 ```
 
-## Demarrage
+## Test rapide sur Discord
 
-```bash
-make build
-make up
-make logs
-```
-
-Quand tout est correct, les logs affichent une ligne de ce type :
-
-```text
-Connecte en tant que ValoBot#1234
-```
-
-## Test
-
-Dans un salon texte du serveur :
+Dans un salon texte ou le bot est present:
 
 ```text
 @ValoBot salut
-```
-
-Le bot doit repondre :
-
-```text
-Salut TonPseudo 👋
-```
-
-Pour lister les maps VALORANT :
-
-```text
 @ValoBot maps
-```
-
-Le bot doit repondre avec une liste de maps recuperee depuis l'API Riot.
-
-Pour afficher l'etat des serveurs VALORANT :
-
-```text
 @ValoBot serveur status
-```
-
-Le bot doit repondre avec un resume des incidents et maintenances en cours.
-
-Pour afficher l'aide :
-
-```text
 @ValoBot help
 ```
 
-Le bot doit repondre avec la liste des commandes disponibles et leur utilite.
+## Depannage
+
+- `Used disallowed intents`: active `MESSAGE CONTENT INTENT` puis redemarre (`make restart`).
+- `Riot API ... 401`: ta cle Riot est invalide/expiree, regenere-la et mets a jour `.env`.
+- Le bot ne repond pas: verifie qu'il est bien mentionne (`@ValoBot ...`) et que `make logs` montre `Connecte en tant que ...`.
+
+## Securite
+
+- Ne commit jamais `.env`.
+- Regenerer les tokens si tu les as exposes dans des logs ou captures.
