@@ -1,0 +1,16 @@
+{
+  "name": "valobot",
+  "version": "1.0.0",
+  "description": "Minimal Discord bot responding to salut when mentioned",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  }
+}

@@ -1,0 +1,9 @@
+services:
+  valobot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: valobot
+    restart: unless-stopped
+    env_file:
+      - .env
